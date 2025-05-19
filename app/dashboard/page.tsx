@@ -17,17 +17,17 @@ export default function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Récupérer l'utilisateur actuel
+  
     const currentUser = getCurrentUser()
 
     if (currentUser) {
-      // Récupérer les événements de l'utilisateur
+     
       const userEvents = getUserEvents(currentUser.id)
-      // Trier par date de création (les plus récents d'abord)
+    
       const sortedEvents = [...userEvents].sort(
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )
-      // Prendre les 2 premiers événements
+     
       setRecentEvents(sortedEvents.slice(0, 2))
     }
 
@@ -71,6 +71,7 @@ export default function DashboardPage() {
             Ajouter un événement
           </Button>
         </Link>
+        
       </DashboardHeader>
 
       <motion.div

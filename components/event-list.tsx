@@ -92,7 +92,14 @@ export function EventList({ events, showActions = false, onEventDeleted }: Event
       {events.map((event) => (
         <Card key={event.id} className="card-enhanced overflow-hidden bg-card/90 backdrop-blur-md border-border/50">
           <div className="relative h-48 w-full">
-            <Image src={event.imageUrl || "/placeholder.svg"} alt={event.title} fill className="object-cover" />
+<Image
+  src="/enetImg.jpg"
+  alt={event.title}
+  fill
+  className="object-cover"
+/>
+
+
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
             <div className="absolute bottom-0 left-0 p-3">
               <h3 className="text-lg font-semibold text-white">{event.title}</h3>

@@ -12,6 +12,7 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar"
 import { ModeToggle } from "@/components/mode-toggle"
+import Image from "next/image"
 
 export default function DashboardLayout({
   children,
@@ -39,17 +40,13 @@ export default function DashboardLayout({
       href: "/dashboard/all-events",
       icon: "calendar",
     },
-    {
-      title: "Utilisateurs",
-      href: "/dashboard/users",
-      icon: "users",
-    },
+  
   ]
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen flex-col relative z-0">
-        {/* ✅ Image de fond derrière tout le contenu */}
+     
         <div className="absolute inset-0 z-[-1]">
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -58,12 +55,8 @@ export default function DashboardLayout({
           <div className="absolute inset-0 bg-black/75" />
         </div>
 
-        {/* ✅ Header */}
-        <header className="sticky top-0 z-40 border-b border-white/20 bg-black/70 backdrop-blur-md">
-          <div className="container flex h-16 items-center justify-between py-4">
-            <div className="hidden md:block">
-              <h1 className="text-xl font-bold text-white">Université - Gestion d'événements</h1>
-            </div>
+        <header className="sticky top-0 z-30 bg-transparent backdrop-blur-lg">
+          <div className="container flex h-16 items-center justify-end px-4">
             <div className="flex items-center gap-4">
               <ModeToggle />
               <UserNav />
@@ -71,13 +64,19 @@ export default function DashboardLayout({
           </div>
         </header>
 
-        {/* ✅ Contenu principal */}
         <div className="flex flex-1 z-10">
-          {/* ✅ Barre latérale */}
-          <Sidebar className="bg-black/80 backdrop-blur-md border-r border-white/20">
+         
+          <Sidebar className="w-48 bg-black/80 backdrop-blur-md border-r border-white/20">
             <SidebarHeader className="border-b border-white/10 pb-4">
-              <div className="flex items-center px-2">
-                <span className="text-xl font-bold text-cyan-400">Université</span>
+              <div className="flex flex-col items-center px-2 pt-4">
+                <Image
+                  src="/logoUEMF.png"
+                  alt="Logo UEMF"
+                  width={100}
+                  height={100}
+                  className="mb-2"
+                  priority
+                />
               </div>
             </SidebarHeader>
 
@@ -92,7 +91,7 @@ export default function DashboardLayout({
             </SidebarFooter>
           </Sidebar>
 
-          {/* ✅ Zone principale de contenu */}
+
           <SidebarInset>
             <main className="flex flex-1 flex-col bg-black/40 backdrop-blur-sm p-4">
               <div className="animate-fadeIn">{children}</div>
