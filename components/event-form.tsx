@@ -15,6 +15,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { ImageIcon, VideoIcon } from "lucide-react"
 import { createEvent, updateEvent } from "@/lib/local-storage"
 import { useToast } from "@/hooks/use-toast"
+import { FileUpload } from "@/components/file-upload"
 
 const formSchema = z.object({
   title: z
@@ -34,9 +35,7 @@ const formSchema = z.object({
       message: "La description ne peut pas dépasser 1000 caractères.",
     }),
   mediaType: z.enum(["image", "video"]),
-  mediaUrl: z.string().url({
-    message: "Veuillez entrer une URL valide.",
-  }),
+  mediaUrl: z.string().optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -54,6 +53,7 @@ interface EventFormProps {
 export function EventForm({ event }: EventFormProps) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const { toast } = useToast()
 
   const defaultValues: Partial<FormValues> = {
@@ -68,16 +68,29 @@ export function EventForm({ event }: EventFormProps) {
     defaultValues,
   })
 
+  const handleFileSelect = (file: File) => {
+    setSelectedFile(file)
+  }
+
   async function onSubmit(values: FormValues) {
     setIsSubmitting(true)
 
     try {
+      // Simuler le stockage du fichier et obtenir une URL
+      let mediaUrl = values.mediaUrl
+
+      if (selectedFile) {
+        // Dans une application réelle, vous téléchargeriez le fichier sur un serveur
+        // et obtiendriez une URL. Ici, nous simulons cela avec un URL local.
+        mediaUrl = URL.createObjectURL(selectedFile)
+      }
+
       // Préparer les données de l'événement
       const eventData = {
         title: values.title,
         description: values.description,
-        imageUrl: values.mediaType === "image" ? values.mediaUrl : "",
-        videoUrl: values.mediaType === "video" ? values.mediaUrl : null,
+        imageUrl: values.mediaType === "image" ? mediaUrl || "" : "",
+        videoUrl: values.mediaType === "video" ? mediaUrl || null : null,
       }
 
       // Créer ou mettre à jour l'événement
@@ -120,7 +133,7 @@ export function EventForm({ event }: EventFormProps) {
   }
 
   return (
-    <Card>
+    <Card className="bg-white/10 backdrop-blur-md border-white/20">
       <CardContent className="pt-6">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -129,12 +142,18 @@ export function EventForm({ event }: EventFormProps) {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Titre</FormLabel>
+                  <FormLabel className="text-white text-base">Titre</FormLabel>
                   <FormControl>
-                    <Input placeholder="Titre de l'événement" {...field} />
+                    <Input
+                      placeholder="Titre de l'événement"
+                      {...field}
+                      className="bg-white/10 border-white/20 text-white h-12 focus:border-cyan-400 focus:ring-cyan-400/20"
+                    />
                   </FormControl>
-                  <FormDescription>Donnez un titre clair et concis à votre événement.</FormDescription>
-                  <FormMessage />
+                  <FormDescription className="text-white/70">
+                    Donnez un titre clair et concis à votre événement.
+                  </FormDescription>
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -144,12 +163,16 @@ export function EventForm({ event }: EventFormProps) {
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description</FormLabel>
+                  <FormLabel className="text-white text-base">Description</FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Description détaillée de l'événement" className="min-h-32" {...field} />
+                    <Textarea
+                      placeholder="Description détaillée de l'événement"
+                      className="min-h-32 bg-white/10 border-white/20 text-white focus:border-cyan-400 focus:ring-cyan-400/20"
+                      {...field}
+                    />
                   </FormControl>
-                  <FormDescription>Décrivez votre événement en détail.</FormDescription>
-                  <FormMessage />
+                  <FormDescription className="text-white/70">Décrivez votre événement en détail.</FormDescription>
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -159,7 +182,7 @@ export function EventForm({ event }: EventFormProps) {
               name="mediaType"
               render={({ field }) => (
                 <FormItem className="space-y-3">
-                  <FormLabel>Type de média</FormLabel>
+                  <FormLabel className="text-white text-base">Type de média</FormLabel>
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
@@ -167,57 +190,50 @@ export function EventForm({ event }: EventFormProps) {
                       className="flex flex-col space-y-1"
                     >
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="image" id="image" />
-                        <Label htmlFor="image" className="flex items-center">
-                          <ImageIcon className="mr-2 h-4 w-4" />
+                        <RadioGroupItem value="image" id="image" className="border-white/50 text-cyan-400" />
+                        <Label htmlFor="image" className="flex items-center text-white">
+                          <ImageIcon className="mr-2 h-4 w-4 text-cyan-400" />
                           Image
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="video" id="video" />
-                        <Label htmlFor="video" className="flex items-center">
-                          <VideoIcon className="mr-2 h-4 w-4" />
+                        <RadioGroupItem value="video" id="video" className="border-white/50 text-cyan-400" />
+                        <Label htmlFor="video" className="flex items-center text-white">
+                          <VideoIcon className="mr-2 h-4 w-4 text-cyan-400" />
                           Vidéo
                         </Label>
                       </div>
                     </RadioGroup>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
 
-            <FormField
-              control={form.control}
-              name="mediaUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>URL du média</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={
-                        form.watch("mediaType") === "image"
-                          ? "https://exemple.com/image.jpg"
-                          : "https://exemple.com/video.mp4"
-                      }
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>
-                    {form.watch("mediaType") === "image"
-                      ? "URL de l'image à afficher pour l'événement."
-                      : "URL de la vidéo à afficher pour l'événement."}
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="space-y-3">
+              <FormLabel className="text-white text-base">Fichier média</FormLabel>
+              <FileUpload
+                type={form.watch("mediaType")}
+                onFileSelect={handleFileSelect}
+                value={form.watch("mediaUrl")}
+              />
+              <FormDescription className="text-white/70">
+                {form.watch("mediaType") === "image"
+                  ? "Importez une image pour votre événement."
+                  : "Importez une vidéo pour votre événement."}
+              </FormDescription>
+            </div>
 
-            <div className="flex justify-end space-x-4">
-              <Button type="button" variant="outline" onClick={() => router.push("/dashboard/events")}>
+            <div className="flex justify-end space-x-4 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => router.push("/dashboard/events")}
+                className="bg-white/10 hover:bg-white/20 border-white/20 text-white"
+              >
                 Annuler
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting} className="bg-cyan-500 hover:bg-cyan-600 text-white">
                 {isSubmitting ? "Enregistrement..." : event ? "Mettre à jour" : "Créer l'événement"}
               </Button>
             </div>

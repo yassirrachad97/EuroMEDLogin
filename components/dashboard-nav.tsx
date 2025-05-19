@@ -22,29 +22,29 @@ export function DashboardNav({ items }: DashboardNavProps) {
     return null
   }
 
- 
+  // Fonction pour obtenir l'icône en fonction du nom
   const getIcon = (iconName: string) => {
     switch (iconName) {
       case "home":
-        return <Home className="h-4 w-4" />
+        return <Home className="h-5 w-5" />
       case "list":
-        return <List className="h-4 w-4" />
+        return <List className="h-5 w-5" />
       case "plus-circle":
-        return <PlusCircle className="h-4 w-4" />
+        return <PlusCircle className="h-5 w-5" />
       case "calendar":
-        return <Calendar className="h-4 w-4" />
+        return <Calendar className="h-5 w-5" />
       case "users":
-        return <Users className="h-4 w-4" />
+        return <Users className="h-5 w-5" />
       case "dashboard":
-        return <LayoutDashboard className="h-4 w-4" />
+        return <LayoutDashboard className="h-5 w-5" />
       case "settings":
-        return <Settings className="h-4 w-4" />
+        return <Settings className="h-5 w-5" />
       case "file-text":
-        return <FileText className="h-4 w-4" />
+        return <FileText className="h-5 w-5" />
       case "bell":
-        return <Bell className="h-4 w-4" />
+        return <Bell className="h-5 w-5" />
       default:
-        return <FileText className="h-4 w-4" />
+        return <FileText className="h-5 w-5" />
     }
   }
 
@@ -54,11 +54,20 @@ export function DashboardNav({ items }: DashboardNavProps) {
         const isActive = pathname === item.href
 
         return (
-          <SidebarMenuItem key={item.href}>
-            <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
-              <Link href={item.href}>
+          <SidebarMenuItem key={item.href} className="mb-2">
+            <SidebarMenuButton
+              asChild
+              isActive={isActive}
+              tooltip={item.title}
+              className={`text-base font-medium ${
+                isActive
+                  ? "bg-cyan-500/20 text-white border-l-4 border-cyan-500"
+                  : "text-white/80 hover:text-white hover:bg-white/10"
+              } transition-all duration-200 rounded-md`}
+            >
+              <Link href={item.href} className="py-3 px-4">
                 {getIcon(item.icon)}
-                <span>{item.title}</span>
+                <span className="ml-3">{item.title}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

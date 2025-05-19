@@ -2,11 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Amélioration de l'image de fond avec un overlay pour meilleure lisibilité */
 body {
   position: relative;
 }
 
+/* Nous ne définissons plus l'image de fond ici car nous la gérons par page */
+/* Chaque page définit sa propre image de fond */
 
+/* Amélioration de la typographie */
 h1,
 h2,
 h3,
@@ -49,6 +53,48 @@ p {
   100% {
     box-shadow: 0 0 0 0 rgba(0, 191, 255, 0);
   }
+}
+
+/* Animation d'entrée pour le dashboard */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Styles pour les inputs */
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Styles pour les scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 191, 255, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 191, 255, 0.7);
 }
 
 @layer base {
