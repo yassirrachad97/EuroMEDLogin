@@ -44,7 +44,6 @@ export default function DashboardPage() {
       setRecentEvents(sortedEvents.slice(0, 2))
     }
   }
-  
 
   const container = {
     hidden: { opacity: 0 },
