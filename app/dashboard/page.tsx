@@ -28,7 +28,7 @@ export default function DashboardPage() {
         (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       )
      
-      setRecentEvents(sortedEvents.slice(0, 2))
+      setRecentEvents(sortedEvents)
     }
 
     setIsLoading(false)
@@ -137,7 +137,13 @@ export default function DashboardPage() {
                   <p className="text-white/70">Chargement des événements...</p>
                 </div>
               ) : (
-                <EventList events={recentEvents} showActions={true} onEventDeleted={refreshEvents} />
+                <EventList
+  events={recentEvents}
+  showActions={true}
+  enableDragDrop={true}
+  onEventDeleted={refreshEvents}
+/>
+
               )}
             </CardContent>
           </Card>

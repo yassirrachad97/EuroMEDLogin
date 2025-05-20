@@ -5,8 +5,12 @@ export interface Event {
   description: string
   imageUrl: string
   videoUrl?: string | null
+  startDate?: string
+  endDate?: string
+  location?: string
   createdAt: string
   createdBy: string
+  order?: number
 }
 
 export interface User {
@@ -19,60 +23,113 @@ export interface User {
 const EVENTS_KEY = "university_events"
 const CURRENT_USER_KEY = "university_current_user"
 
+// Fonction pour réinitialiser les données
+export function resetEventData() {
+  if (typeof window === "undefined") return
+
+  // Données initiales avec vos nouvelles images
+  const initialEvents: Event[] = [
+    {
+      id: "1",
+      title: "Conférence sur l'IA",
+      description: "Une conférence sur l'intelligence artificielle et son impact sur l'éducation",
+      imageUrl: "/eventImg1.jpg",
+      startDate: "2023-05-15",
+      endDate: "2023-05-15",
+      location: "Amphithéâtre A, UEMF",
+      createdAt: "2023-05-15T10:00:00Z",
+      createdBy: "user1",
+      order: 0,
+    },
+    {
+      id: "2",
+      title: "Atelier de programmation",
+      description: "Apprenez les bases de la programmation web avec React",
+      imageUrl: "/eventImg2.jpg",
+      startDate: "2023-05-10",
+      endDate: "2023-05-10",
+      location: "Salle informatique B12, UEMF",
+      createdAt: "2023-05-10T14:30:00Z",
+      createdBy: "user1",
+      order: 1,
+    },
+    {
+      id: "3",
+      title: "Séminaire sur la cybersécurité",
+      description: "Découvrez les dernières tendances en matière de cybersécurité",
+      imageUrl: "/eventImg3.jpeg",
+      startDate: "2023-04-20",
+      endDate: "2023-04-21",
+      location: "Centre de conférences, UEMF",
+      createdAt: "2023-04-20T09:15:00Z",
+      createdBy: "user1",
+      order: 2,
+    },
+    {
+      id: "4",
+      title: "Journée portes ouvertes",
+      description: "Venez découvrir notre université et nos programmes",
+      imageUrl: "/enetImg.jpg",
+      startDate: "2023-06-05",
+      endDate: "2023-06-05",
+      location: "Campus principal, UEMF",
+      createdAt: "2023-06-05T11:00:00Z",
+      createdBy: "user2",
+      order: 3,
+    },
+    {
+      id: "5",
+      title: "Conférence sur le développement durable",
+      description: "Comment intégrer le développement durable dans nos pratiques quotidiennes",
+      imageUrl: "/eventImg1.jpg",
+      startDate: "2023-06-10",
+      endDate: "2023-06-11",
+      location: "Salle de conférence C, UEMF",
+      createdAt: "2023-06-10T15:30:00Z",
+      createdBy: "user3",
+      order: 4,
+    },
+  ]
+
+  localStorage.setItem(EVENTS_KEY, JSON.stringify(initialEvents))
+}
+
 // Fonctions pour les événements
 export function getEvents(): Event[] {
   if (typeof window === "undefined") return []
 
   const eventsJson = localStorage.getItem(EVENTS_KEY)
   if (!eventsJson) {
-    // Données initiales si aucun événement n'existe
-    const initialEvents: Event[] = [
-      {
-        id: "1",
-        title: "Conférence sur l'IA",
-        description: "Une conférence sur l'intelligence artificielle et son impact sur l'éducation",
-        imageUrl: "/placeholder.svg?height=200&width=400",
-        createdAt: "2023-05-15T10:00:00Z",
-        createdBy: "user1",
-      },
-      {
-        id: "2",
-        title: "Atelier de programmation",
-        description: "Apprenez les bases de la programmation web avec React",
-        imageUrl: "/placeholder.svg?height=200&width=400",
-        createdAt: "2023-05-10T14:30:00Z",
-        createdBy: "user1",
-      },
-      {
-        id: "3",
-        title: "Séminaire sur la cybersécurité",
-        description: "Découvrez les dernières tendances en matière de cybersécurité",
-        imageUrl: "/placeholder.svg?height=200&width=400",
-        createdAt: "2023-04-20T09:15:00Z",
-        createdBy: "user1",
-      },
-      {
-        id: "4",
-        title: "Journée portes ouvertes",
-        description: "Venez découvrir notre université et nos programmes",
-        imageUrl: "/placeholder.svg?height=200&width=400",
-        createdAt: "2023-06-05T11:00:00Z",
-        createdBy: "user2",
-      },
-      {
-        id: "5",
-        title: "Conférence sur le développement durable",
-        description: "Comment intégrer le développement durable dans nos pratiques quotidiennes",
-        imageUrl: "/placeholder.svg?height=200&width=400",
-        createdAt: "2023-06-10T15:30:00Z",
-        createdBy: "user3",
-      },
-    ]
-    localStorage.setItem(EVENTS_KEY, JSON.stringify(initialEvents))
-    return initialEvents
+    // Réinitialiser avec les données initiales
+    resetEventData()
+    return getEvents()
   }
 
-  return JSON.parse(eventsJson)
+  try {
+    const events = JSON.parse(eventsJson)
+
+    // Vérifier si les événements ont les propriétés requises
+    const hasValidEvents = events.every(
+      (event: any) =>
+        event.id &&
+        event.title &&
+        event.description &&
+        typeof event.startDate !== "undefined" &&
+        typeof event.endDate !== "undefined",
+    )
+
+    if (!hasValidEvents) {
+      console.warn("Données d'événements invalides détectées, réinitialisation...")
+      resetEventData()
+      return getEvents()
+    }
+
+    return events
+  } catch (error) {
+    console.error("Erreur lors de la récupération des événements:", error)
+    resetEventData()
+    return getEvents()
+  }
 }
 
 export function getEventById(id: string): Event | undefined {
@@ -82,10 +139,10 @@ export function getEventById(id: string): Event | undefined {
 
 export function getUserEvents(userId: string): Event[] {
   const events = getEvents()
-  return events.filter((event) => event.createdBy === userId)
+  return events.filter((event) => event.createdBy === userId).sort((a, b) => (a.order || 0) - (b.order || 0))
 }
 
-export function createEvent(eventData: Omit<Event, "id" | "createdAt" | "createdBy">): Event {
+export function createEvent(eventData: Omit<Event, "id" | "createdAt" | "createdBy" | "order">): Event {
   const events = getEvents()
   const currentUser = getCurrentUser()
 
@@ -93,7 +150,8 @@ export function createEvent(eventData: Omit<Event, "id" | "createdAt" | "created
     id: Date.now().toString(),
     ...eventData,
     createdAt: new Date().toISOString(),
-    createdBy: currentUser?.id || "user1", // Fallback à user1 si pas d'utilisateur connecté
+    createdBy: currentUser?.id || "user1",
+    order: events.length,
   }
 
   events.push(newEvent)
@@ -111,14 +169,41 @@ export function updateEvent(id: string, eventData: Partial<Event>): Event | null
   events[eventIndex] = {
     ...events[eventIndex],
     ...eventData,
-    id: events[eventIndex].id, // Assure que l'ID ne change pas
-    createdBy: events[eventIndex].createdBy, // Assure que le créateur ne change pas
-    createdAt: events[eventIndex].createdAt, // Assure que la date de création ne change pas
+    id: events[eventIndex].id,
+    createdBy: events[eventIndex].createdBy,
+    createdAt: events[eventIndex].createdAt,
+    order: events[eventIndex].order,
   }
 
   localStorage.setItem(EVENTS_KEY, JSON.stringify(events))
 
   return events[eventIndex]
+}
+
+export function updateEventOrder(updatedEvents: Event[]): boolean {
+  try {
+    const allEvents = getEvents()
+
+    // Créer un map des événements mis à jour pour un accès rapide
+    const updatedEventsMap = new Map(updatedEvents.map((event) => [event.id, event]))
+
+    // Mettre à jour l'ordre des événements existants
+    const newEvents = allEvents.map((event) => {
+      if (updatedEventsMap.has(event.id)) {
+        return {
+          ...event,
+          order: updatedEventsMap.get(event.id)?.order || event.order,
+        }
+      }
+      return event
+    })
+
+    localStorage.setItem(EVENTS_KEY, JSON.stringify(newEvents))
+    return true
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour de l'ordre des événements:", error)
+    return false
+  }
 }
 
 export function deleteEvent(id: string): boolean {

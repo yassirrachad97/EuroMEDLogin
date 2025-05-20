@@ -26,7 +26,7 @@ export default function LoginForm() {
     e.preventDefault()
     setIsLoading(true)
 
-    // Simuler un délai de chargement pour une meilleure UX
+
     setTimeout(() => {
       const user = login(username, password)
 
@@ -53,14 +53,16 @@ export default function LoginForm() {
    <div className="relative w-full max-w-md mx-auto">
   <div className="text-center mb-4">
     <div className="flex justify-center mb-3">
-      <div className="relative w-32 h-12">
-        <Image src="/logoUEMF.png" alt="EUROMED UNIVERSITY OF FES" fill className="object-contain" priority />
-      </div>
+      <div className="relative w-40 h-16">
+  <Image src="/logoUEMF.png" alt="EUROMED UNIVERSITY OF FES" fill className="object-contain" priority />
+</div>
+
     </div>
     <p className="text-white/80 text-sm">Plateforme de gestion d'événements</p>
   </div>
 
-  <div className="bg-black/60 backdrop-blur-md rounded-xl p-4 border-l-4 border-cyan-500 shadow-2xl">
+ <div className="bg-black/60 backdrop-blur-md rounded-2xl p-6 border-l-4 border-cyan-500 shadow-2xl">
+
     <h2 className="text-xl font-semibold text-white mb-4 text-center">Connexion</h2>
 
     <form onSubmit={handleSubmit}>

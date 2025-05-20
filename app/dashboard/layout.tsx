@@ -40,13 +40,12 @@ export default function DashboardLayout({
       href: "/dashboard/all-events",
       icon: "calendar",
     },
-  
   ]
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen flex-col relative z-0">
-     
+        {/* Background */}
         <div className="absolute inset-0 z-[-1]">
           <div
             className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -55,18 +54,10 @@ export default function DashboardLayout({
           <div className="absolute inset-0 bg-black/75" />
         </div>
 
-        <header className="sticky top-0 z-30 bg-transparent backdrop-blur-lg">
-          <div className="container flex h-16 items-center justify-end px-4">
-            <div className="flex items-center gap-4">
-              <ModeToggle />
-              <UserNav />
-            </div>
-          </div>
-        </header>
-
+        {/* Layout */}
         <div className="flex flex-1 z-10">
-         
-          <Sidebar className="w-48 bg-black/80 backdrop-blur-md border-r border-white/20">
+          {/* Sidebar */}
+          <Sidebar className="w-52 bg-black/80 backdrop-blur-md border-r border-white/20">
             <SidebarHeader className="border-b border-white/10 pb-4">
               <div className="flex flex-col items-center px-2 pt-4">
                 <Image
@@ -84,14 +75,19 @@ export default function DashboardLayout({
               <DashboardNav items={navItems} />
             </SidebarContent>
 
-            <SidebarFooter>
-              <div className="px-3 py-2 border-t border-white/10 mt-2">
-                <div className="text-xs text-white/70">© 2023 Université</div>
-              </div>
-            </SidebarFooter>
+          <SidebarFooter className="border-t border-white/10 mt-2 pt-4 px-3">
+  <div className="flex flex-col items-center gap-4 w-full">
+    <div className="flex flex-row items-center justify-between gap-4 w-full">
+      <ModeToggle className="text-white" />
+      <UserNav />
+    </div>
+    <div className="text-xs text-white/70 pt-2">© EUROMED Université</div>
+  </div>
+</SidebarFooter>
+
           </Sidebar>
 
-
+          {/* Main Content */}
           <SidebarInset>
             <main className="flex flex-1 flex-col bg-black/40 backdrop-blur-sm p-4">
               <div className="animate-fadeIn">{children}</div>

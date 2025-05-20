@@ -97,6 +97,11 @@ textarea::placeholder {
   background: rgba(0, 191, 255, 0.7);
 }
 
+/* Perspective pour les animations 3D */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
 @layer base {
   :root {
     --background: 210 40% 98%;
