@@ -2,77 +2,56 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar"
-import { Home, List, PlusCircle, Calendar, Users, LayoutDashboard, Settings, FileText, Bell } from "lucide-react"
+import { Home, List, PlusCircle, Calendar, Settings } from "lucide-react"
 
-interface NavItem {
-  title: string
-  href: string
-  icon: string
-}
-
-interface DashboardNavProps {
-  items: NavItem[]
-}
-
-export function DashboardNav({ items }: DashboardNavProps) {
+export function DashboardNav() {
   const pathname = usePathname()
 
-  if (!items?.length) {
-    return null
-  }
-
-  // Fonction pour obtenir l'icône en fonction du nom
-  const getIcon = (iconName: string) => {
-    switch (iconName) {
-      case "home":
-        return <Home className="h-5 w-5" />
-      case "list":
-        return <List className="h-5 w-5" />
-      case "plus-circle":
-        return <PlusCircle className="h-5 w-5" />
-      case "calendar":
-        return <Calendar className="h-5 w-5" />
-      case "users":
-        return <Users className="h-5 w-5" />
-      case "dashboard":
-        return <LayoutDashboard className="h-5 w-5" />
-      case "settings":
-        return <Settings className="h-5 w-5" />
-      case "file-text":
-        return <FileText className="h-5 w-5" />
-      case "bell":
-        return <Bell className="h-5 w-5" />
-      default:
-        return <FileText className="h-5 w-5" />
-    }
-  }
+  const navItems = [
+    {
+      title: "Dashboard",
+      href: "/dashboard",
+      icon: <Home className="h-5 w-5" />,
+    },
+    {
+      title: "Mes événements",
+      href: "/dashboard/events",
+      icon: <List className="h-5 w-5" />,
+      badge: 3,
+    },
+    {
+      title: "Tous les événements",
+      href: "/dashboard/all-events",
+      icon: <Calendar className="h-5 w-5" />,
+    },
+    {
+      title: "Ajouter un événement",
+      href: "/dashboard/events/new",
+      icon: <PlusCircle className="h-5 w-5" />,
+    },
+   
+  ]
 
   return (
-    <SidebarMenu>
-      {items.map((item) => {
+    <nav className="space-y-1 px-2">
+      {navItems.map((item) => {
         const isActive = pathname === item.href
-
         return (
-          <SidebarMenuItem key={item.href} className="mb-2">
-            <SidebarMenuButton
-              asChild
-              isActive={isActive}
-              tooltip={item.title}
-              className={`text-base font-medium ${
-                isActive
-                  ? "bg-cyan-500/20 text-white border-l-4 border-cyan-500"
-                  : "text-white/80 hover:text-white hover:bg-white/10"
-              } transition-all duration-200 rounded-md`}
-            >
-              <Link href={item.href} className="py-3 px-4">
-                {getIcon(item.icon)}
-                <span className="ml-3">{item.title}</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+              isActive ? "bg-violet-700 text-white" : "text-white/80 hover:bg-violet-700/50 hover:text-white"
+            }`}
+          >
+            {item.icon}
+            <span>{item.title}</span>
+            {item.badge && (
+              <span className="ml-auto bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{item.badge}</span>
+            )}
+          </Link>
         )
       })}
-    </SidebarMenu>
+    </nav>
   )
 }

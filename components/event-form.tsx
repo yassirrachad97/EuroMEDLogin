@@ -115,7 +115,7 @@ export function EventForm({ event }: EventFormProps) {
   }
 
   return (
-    <Card className="bg-white/10 backdrop-blur-md border-white/20 w-full rounded-none">
+    <Card className="bg-white border border-gray-200 shadow-sm w-full rounded-none">
       <CardContent className="pt-6 px-4 md:px-8">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-5xl mx-auto">
@@ -127,18 +127,18 @@ export function EventForm({ event }: EventFormProps) {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base">Titre</FormLabel>
+                      <FormLabel className="text-gray-700 text-base font-medium">Titre de l'événement</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Titre de l'événement"
                           {...field}
-                          className="bg-white/10 border-white/20 text-white h-12 focus:border-cyan-400 focus:ring-cyan-400/20"
+                          className="bg-white border-gray-300 text-gray-900 h-12 focus:border-violet-500 focus:ring-violet-500/20 placeholder:text-gray-400"
                         />
                       </FormControl>
-                      <FormDescription className="text-white/70">
+                      <FormDescription className="text-gray-500">
                         Donnez un titre clair et concis à votre événement.
                       </FormDescription>
-                      <FormMessage className="text-red-400" />
+                      <FormMessage className="text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -148,15 +148,15 @@ export function EventForm({ event }: EventFormProps) {
                   name="startDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base">Date de début</FormLabel>
+                      <FormLabel className="text-gray-700 text-base font-medium">Date de début</FormLabel>
                       <FormControl>
                         <Input
                           type="date"
                           {...field}
-                          className="bg-white/10 border-white/20 text-white h-12 focus:border-cyan-400 focus:ring-cyan-400/20"
+                          className="bg-white border-gray-300 text-gray-900 h-12 focus:border-violet-500 focus:ring-violet-500/20"
                         />
                       </FormControl>
-                      <FormMessage className="text-red-400" />
+                      <FormMessage className="text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -166,15 +166,15 @@ export function EventForm({ event }: EventFormProps) {
                   name="location"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base">Localisation</FormLabel>
+                      <FormLabel className="text-gray-700 text-base font-medium">Localisation</FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Université Euromed, Fès..."
                           {...field}
-                          className="bg-white/10 border-white/20 text-white h-12 focus:border-cyan-400 focus:ring-cyan-400/20"
+                          className="bg-white border-gray-300 text-gray-900 h-12 focus:border-violet-500 focus:ring-violet-500/20 placeholder:text-gray-400"
                         />
                       </FormControl>
-                      <FormMessage className="text-red-400" />
+                      <FormMessage className="text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -184,30 +184,30 @@ export function EventForm({ event }: EventFormProps) {
                   name="mediaType"
                   render={({ field }) => (
                     <FormItem className="space-y-3">
-                      <FormLabel className="text-white text-base">Type de média</FormLabel>
+                      <FormLabel className="text-gray-700 text-base font-medium">Type de média</FormLabel>
                       <FormControl>
                         <RadioGroup
                           onValueChange={field.onChange}
                           defaultValue={field.value}
-                          className="flex flex-col space-y-1"
+                          className="flex flex-col space-y-2"
                         >
                           <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="image" id="image" className="border-white/50 text-cyan-400" />
-                            <Label htmlFor="image" className="flex items-center text-white">
-                              <ImageIcon className="mr-2 h-4 w-4 text-cyan-400" />
+                            <RadioGroupItem value="image" id="image" className="border-gray-400 text-violet-600" />
+                            <Label htmlFor="image" className="flex items-center text-gray-700 cursor-pointer">
+                              <ImageIcon className="mr-2 h-4 w-4 text-violet-600" />
                               Image
                             </Label>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <RadioGroupItem value="video" id="video" className="border-white/50 text-cyan-400" />
-                            <Label htmlFor="video" className="flex items-center text-white">
-                              <VideoIcon className="mr-2 h-4 w-4 text-cyan-400" />
+                            <RadioGroupItem value="video" id="video" className="border-gray-400 text-violet-600" />
+                            <Label htmlFor="video" className="flex items-center text-gray-700 cursor-pointer">
+                              <VideoIcon className="mr-2 h-4 w-4 text-violet-600" />
                               Vidéo
                             </Label>
                           </div>
                         </RadioGroup>
                       </FormControl>
-                      <FormMessage className="text-red-400" />
+                      <FormMessage className="text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -220,16 +220,18 @@ export function EventForm({ event }: EventFormProps) {
                   name="description"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base">Description</FormLabel>
+                      <FormLabel className="text-gray-700 text-base font-medium">
+                        Description détaillée de l'événement
+                      </FormLabel>
                       <FormControl>
                         <Textarea
                           placeholder="Description détaillée de l'événement"
-                          className="min-h-32 bg-white/10 border-white/20 text-white focus:border-cyan-400 focus:ring-cyan-400/20"
+                          className="min-h-32 bg-white border-gray-300 text-gray-900 focus:border-violet-500 focus:ring-violet-500/20 placeholder:text-gray-400"
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription className="text-white/70">Décrivez votre événement en détail.</FormDescription>
-                      <FormMessage className="text-red-400" />
+                      <FormDescription className="text-gray-500">Décrivez votre événement en détail.</FormDescription>
+                      <FormMessage className="text-red-500" />
                     </FormItem>
                   )}
                 />
@@ -239,27 +241,29 @@ export function EventForm({ event }: EventFormProps) {
                   name="endDate"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-white text-base">Date de fin</FormLabel>
+                      <FormLabel className="text-gray-700 text-base font-medium">Date de fin</FormLabel>
                       <FormControl>
                         <Input
                           type="date"
                           {...field}
-                          className="bg-white/10 border-white/20 text-white h-12 focus:border-cyan-400 focus:ring-cyan-400/20"
+                          className="bg-white border-gray-300 text-gray-900 h-12 focus:border-violet-500 focus:ring-violet-500/20"
                         />
                       </FormControl>
-                      <FormMessage className="text-red-400" />
+                      <FormMessage className="text-red-500" />
                     </FormItem>
                   )}
                 />
 
                 <div className="space-y-3">
-                  <FormLabel className="text-white text-base">Fichier média</FormLabel>
-                  <FileUpload
-                    type={form.watch("mediaType")}
-                    onFileSelect={handleFileSelect}
-                    value={form.watch("mediaUrl")}
-                  />
-                  <FormDescription className="text-white/70">
+                  <FormLabel className="text-gray-700 text-base font-medium">Fichier média</FormLabel>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50">
+                    <FileUpload
+                      type={form.watch("mediaType")}
+                      onFileSelect={handleFileSelect}
+                      value={form.watch("mediaUrl")}
+                    />
+                  </div>
+                  <FormDescription className="text-gray-500">
                     {form.watch("mediaType") === "image"
                       ? "Importez une image pour votre événement."
                       : "Importez une vidéo pour votre événement."}
@@ -268,16 +272,16 @@ export function EventForm({ event }: EventFormProps) {
               </div>
             </div>
 
-            <div className="flex justify-end space-x-4 pt-8 mt-4 border-t border-white/10">
+            <div className="flex justify-end space-x-4 pt-8 mt-4 border-t border-gray-200">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => router.push("/dashboard/events")}
-                className="bg-white/10 hover:bg-white/20 border-white/20 text-white"
+                className="bg-white hover:bg-gray-50 border-gray-300 text-gray-700"
               >
                 Annuler
               </Button>
-              <Button type="submit" disabled={isSubmitting} className="bg-cyan-500 hover:bg-cyan-600 text-white">
+              <Button type="submit" disabled={isSubmitting} className="bg-violet-600 hover:bg-violet-700 text-white">
                 {isSubmitting ? "Enregistrement..." : event ? "Mettre à jour" : "Créer l'événement"}
               </Button>
             </div>

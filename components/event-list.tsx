@@ -1,11 +1,11 @@
 "use client"
 
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash2, MapPin, GripVertical } from "lucide-react"
+import { Edit, Trash2, MapPin, Calendar, Clock } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,10 +17,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { deleteEvent, updateEventOrder } from "@/lib/local-storage"
+import { deleteEvent } from "@/lib/local-storage"
 import { useToast } from "@/hooks/use-toast"
 import { useRouter } from "next/navigation"
-import { motion, Reorder } from "framer-motion"
 
 interface Event {
   id: string
@@ -39,18 +38,13 @@ interface EventListProps {
   events: Event[]
   showActions?: boolean
   onEventDeleted?: () => void
-  enableDragDrop?: boolean
+  compact?: boolean
 }
 
-export function EventList({ events, showActions = false, onEventDeleted, enableDragDrop = false }: EventListProps) {
+export function EventList({ events, showActions = false, onEventDeleted, compact = false }: EventListProps) {
   const [eventToDelete, setEventToDelete] = useState<string | null>(null)
-  const [reorderableEvents, setReorderableEvents] = useState<Event[]>(events)
   const { toast } = useToast()
   const router = useRouter()
-
-  useEffect(() => {
-    setReorderableEvents([...events])
-  }, [events])
 
   // Fonction de formatage robuste avec mois en toutes lettres
   const formatEventDate = (dateString?: string) => {
@@ -95,152 +89,142 @@ export function EventList({ events, showActions = false, onEventDeleted, enableD
     setEventToDelete(null)
   }
 
-  const handleReorder = (newOrder: Event[]) => {
-    setReorderableEvents(newOrder)
-
-    if (enableDragDrop) {
-      const updatedEvents = newOrder.map((event, index) => ({
-        ...event,
-        order: index,
-      }))
-      updateEventOrder(updatedEvents)
-
-      toast({
-        title: "Ordre mis à jour",
-        description: "L'ordre des événements a été mis à jour.",
-      })
-    }
-  }
-
   if (!events.length) {
     return (
       <div className="flex flex-col items-center justify-center p-8 text-center">
-        <p className="text-white/70">Aucun événement trouvé</p>
+        <p className="text-gray-500">Aucun événement trouvé</p>
       </div>
     )
   }
 
-  const EventCard = ({ event, index, isDraggable = false }: { event: Event; index: number; isDraggable?: boolean }) => {
+  if (compact) {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1, duration: 0.5 }}
-        layout
-        className="h-full w-full"
-      >
-        <Card
-          className={`card-enhanced overflow-hidden bg-white/10 backdrop-blur-md border-white/20 h-full flex flex-col relative ${isDraggable ? "border-cyan-400 border-opacity-50" : ""}`}
-        >
-          {isDraggable && showActions && (
-            <div className="absolute top-2 right-2 z-10 cursor-grab active:cursor-grabbing p-2 rounded-full bg-black/70 text-white hover:bg-cyan-800/70 transition-colors">
-              <GripVertical className="h-5 w-5" />
+      <div className="space-y-4">
+        {events.map((event) => (
+          <div key={event.id} className="flex items-center gap-4 p-3 hover:bg-gray-50 rounded-lg transition-colors">
+            <div className="relative h-12 w-12 rounded-lg overflow-hidden flex-shrink-0">
+              <Image src={event.imageUrl || "/placeholder.svg"} alt={event.title} fill className="object-cover" />
             </div>
-          )}
-
-          <div className="relative h-48 w-full">
-            <Image src={event.imageUrl || "/placeholder.svg"} alt={event.title} fill className="object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 p-3">
-              <h3 className="text-lg font-semibold text-white">{event.title}</h3>
-              <p className="text-xs text-white/80">
-                {event.startDate && event.endDate
-                  ? `Du ${formatEventDate(event.startDate)} au ${formatEventDate(event.endDate)}`
-                  : event.startDate
-                    ? `Le ${formatEventDate(event.startDate)}`
-                    : "Date non spécifiée"}
-              </p>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-sm font-medium text-gray-900 truncate">{event.title}</h3>
+              <div className="flex items-center text-xs text-gray-500 mt-1">
+                <Calendar className="h-3 w-3 mr-1" />
+                <span>
+                  {event.startDate && event.endDate ? `${formatEventDate(event.startDate)}` : "Date non spécifiée"}
+                </span>
+              </div>
             </div>
-          </div>
-
-          <div className="bg-cyan-900/50 w-full px-4 py-2">
             {event.location && (
-              <div className="flex items-center text-white/90 text-sm">
-                <MapPin className="h-4 w-4 mr-2 text-cyan-400 flex-shrink-0" />
-                <span className="truncate">{event.location}</span>
+              <div className="text-xs text-gray-500 flex items-center">
+                <MapPin className="h-3 w-3 mr-1" />
+                <span className="truncate max-w-[100px]">{event.location}</span>
               </div>
             )}
           </div>
-
-          <CardContent className="pt-4 flex-1">
-            <p className="line-clamp-3 text-white/90">{event.description}</p>
-          </CardContent>
-
-          {showActions && (
-            <CardFooter className="flex justify-between border-t border-white/20 pt-4">
-              <Link href={`/dashboard/events/${event.id}/edit`}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-white/10 hover:bg-white/20 border-white/20 text-white"
-                >
-                  <Edit className="mr-2 h-4 w-4" />
-                  Modifier
-                </Button>
-              </Link>
-              <AlertDialog open={eventToDelete === event.id} onOpenChange={(open) => !open && setEventToDelete(null)}>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    className="transition-all hover:bg-destructive/90"
-                    onClick={() => setEventToDelete(event.id)}
-                  >
-                    <Trash2 className="mr-2 h-4 w-4" />
-                    Supprimer
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent className="bg-black/90 backdrop-blur-lg border-white/20 text-white">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Êtes-vous sûr?</AlertDialogTitle>
-                    <AlertDialogDescription className="text-white/70">
-                      Cette action ne peut pas être annulée. Cela supprimera définitivement l'événement "{event.title}"
-                      et toutes les données associées.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className="bg-white/10 hover:bg-white/20 border-white/20 text-white">
-                      Annuler
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => handleDelete(event.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white"
-                    >
-                      Supprimer
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </CardFooter>
-          )}
-        </Card>
-      </motion.div>
-    )
-  }
-
-  if (enableDragDrop && showActions) {
-    return (
-      <div className="w-full space-y-6">
-        <Reorder.Group
-          axis="y"
-          values={reorderableEvents}
-          onReorder={handleReorder}
-          className="flex flex-col space-y-6 w-full"
-        >
-          {reorderableEvents.map((event, index) => (
-            <Reorder.Item key={event.id} value={event} className="w-full">
-              <EventCard event={event} index={index} isDraggable={true} />
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
+        ))}
       </div>
     )
   }
 
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {events.map((event, index) => (
-        <EventCard key={event.id} event={event} index={index} />
+      {events.map((event) => (
+        <Card
+          key={event.id}
+          className="group overflow-hidden hover:shadow-lg transition-all duration-300 border-0 bg-white"
+        >
+          <div className="relative h-48 w-full overflow-hidden">
+            <Image
+              src={event.imageUrl || "/placeholder.svg"}
+              alt={event.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+
+            {/* Badge de date */}
+            <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm rounded-lg px-2 py-1">
+              <div className="flex items-center text-xs font-medium text-gray-700">
+                <Clock className="h-3 w-3 mr-1" />
+                {event.startDate ? formatEventDate(event.startDate).split(" ")[0] : "TBD"}
+              </div>
+            </div>
+
+            {/* Titre sur l'image */}
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+              <h3 className="text-lg font-bold text-white mb-1 line-clamp-2">{event.title}</h3>
+            </div>
+          </div>
+
+          <CardContent className="p-4 space-y-3">
+            <p className="text-sm text-gray-600 line-clamp-2">{event.description}</p>
+
+            <div className="space-y-2">
+              {event.startDate && event.endDate && (
+                <div className="flex items-center text-xs text-gray-500">
+                  <Calendar className="h-4 w-4 mr-2 text-violet-500" />
+                  <span>
+                    {event.startDate === event.endDate
+                      ? `Le ${formatEventDate(event.startDate)}`
+                      : `Du ${formatEventDate(event.startDate)} au ${formatEventDate(event.endDate)}`}
+                  </span>
+                </div>
+              )}
+
+              {event.location && (
+                <div className="flex items-center text-xs text-gray-500">
+                  <MapPin className="h-4 w-4 mr-2 text-violet-500" />
+                  <span className="truncate">{event.location}</span>
+                </div>
+              )}
+            </div>
+
+            {showActions && (
+              <div className="flex gap-2 pt-3 border-t border-gray-100">
+                <Link href={`/dashboard/events/${event.id}/edit`} className="flex-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full text-violet-600 border-violet-200 hover:bg-violet-50 hover:border-violet-300"
+                  >
+                    <Edit className="mr-2 h-4 w-4" />
+                    Modifier
+                  </Button>
+                </Link>
+                <AlertDialog open={eventToDelete === event.id} onOpenChange={(open) => !open && setEventToDelete(null)}>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                      onClick={() => setEventToDelete(event.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Êtes-vous sûr?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Cette action ne peut pas être annulée. Cela supprimera définitivement l'événement "{event.title}
+                        " et toutes les données associées.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Annuler</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={() => handleDelete(event.id)}
+                        className="bg-red-600 hover:bg-red-700 text-white"
+                      >
+                        Supprimer
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       ))}
     </div>
   )

@@ -61,8 +61,8 @@ export function EventCarousel({ events, autoRotate = true, rotationInterval = 50
 
   if (!events.length) {
     return (
-      <div className="flex items-center justify-center h-96 bg-white/5 rounded-xl">
-        <p className="text-white/70">Aucun événement disponible</p>
+      <div className="flex items-center justify-center h-96 bg-gray-100 rounded-xl border">
+        <p className="text-gray-500">Aucun événement disponible</p>
       </div>
     )
   }
@@ -100,12 +100,12 @@ export function EventCarousel({ events, autoRotate = true, rotationInterval = 50
 
   return (
     <div
-      className="relative overflow-hidden rounded-xl bg-gradient-to-b from-cyan-900/20 to-black/40 backdrop-blur-sm border border-white/10"
+      className="relative overflow-hidden rounded-xl bg-white border border-gray-200 shadow-lg"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
-        <span className="text-white/90 text-sm font-medium">
+      <div className="absolute top-4 right-4 z-20 flex items-center gap-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 border">
+        <span className="text-gray-700 text-sm font-medium">
           {currentIndex + 1} / {events.length}
         </span>
       </div>
@@ -130,19 +130,19 @@ export function EventCarousel({ events, autoRotate = true, rotationInterval = 50
                   fill
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/50"></div>
               </div>
 
               {/* Contenu de l'événement */}
-              <div className="relative flex-1 p-6 flex flex-col justify-between bg-gradient-to-t from-black/80 to-black/40">
+              <div className="relative flex-1 p-6 flex flex-col justify-between bg-gradient-to-t from-gray-50 to-white">
                 <div>
-                  <h2 className="text-3xl font-bold text-white mb-2">{currentEvent.title}</h2>
-                  <p className="text-white/80 text-lg mb-4 line-clamp-3">{currentEvent.description}</p>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-2">{currentEvent.title}</h2>
+                  <p className="text-gray-600 text-lg mb-4 line-clamp-3">{currentEvent.description}</p>
 
-                  <div className="flex flex-col gap-2 mt-4">
+                  <div className="flex flex-col gap-3 mt-4">
                     {currentEvent.startDate && currentEvent.endDate && (
-                      <div className="flex items-center text-white/90">
-                        <Calendar className="h-5 w-5 mr-3 text-cyan-400" />
+                      <div className="flex items-center text-gray-700">
+                        <Calendar className="h-5 w-5 mr-3 text-violet-500" />
                         <span>
                           {currentEvent.startDate === currentEvent.endDate
                             ? `Le ${formatEventDate(currentEvent.startDate)}`
@@ -154,8 +154,8 @@ export function EventCarousel({ events, autoRotate = true, rotationInterval = 50
                     )}
 
                     {currentEvent.location && (
-                      <div className="flex items-center text-white/90">
-                        <MapPin className="h-5 w-5 mr-3 text-cyan-400" />
+                      <div className="flex items-center text-gray-700">
+                        <MapPin className="h-5 w-5 mr-3 text-violet-500" />
                         <span>{currentEvent.location}</span>
                       </div>
                     )}
@@ -163,9 +163,9 @@ export function EventCarousel({ events, autoRotate = true, rotationInterval = 50
                 </div>
 
                 <div className="flex justify-center mt-6">
-                  <Card className="bg-white/10 backdrop-blur-md border-white/20 p-3 inline-flex">
-                    <p className="text-white/70 text-sm">
-                      <span className="text-cyan-400 font-medium">Conseil:</span> Survolez le carrousel pour mettre en
+                  <Card className="bg-violet-50 border-violet-200 p-3 inline-flex">
+                    <p className="text-violet-700 text-sm">
+                      <span className="text-violet-600 font-medium">Conseil:</span> Survolez le carrousel pour mettre en
                       pause la rotation automatique
                     </p>
                   </Card>
@@ -179,7 +179,7 @@ export function EventCarousel({ events, autoRotate = true, rotationInterval = 50
         <Button
           variant="ghost"
           size="icon"
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-cyan-900/70 border border-white/20"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white/90 backdrop-blur-sm text-gray-700 hover:bg-white border border-gray-200 shadow-lg"
           onClick={prevSlide}
         >
           <ChevronLeft className="h-6 w-6" />
@@ -189,7 +189,7 @@ export function EventCarousel({ events, autoRotate = true, rotationInterval = 50
         <Button
           variant="ghost"
           size="icon"
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-black/50 backdrop-blur-sm text-white hover:bg-cyan-900/70 border border-white/20"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 h-12 w-12 rounded-full bg-white/90 backdrop-blur-sm text-gray-700 hover:bg-white border border-gray-200 shadow-lg"
           onClick={nextSlide}
         >
           <ChevronRight className="h-6 w-6" />
@@ -202,7 +202,7 @@ export function EventCarousel({ events, autoRotate = true, rotationInterval = 50
             <button
               key={index}
               className={`h-2 rounded-full transition-all ${
-                index === currentIndex ? "w-8 bg-cyan-500" : "w-2 bg-white/50"
+                index === currentIndex ? "w-8 bg-violet-500" : "w-2 bg-gray-400"
               }`}
               onClick={() => {
                 setDirection(index > currentIndex ? 1 : -1)

@@ -4,7 +4,6 @@ import type React from "react"
 
 import { useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Upload, X, ImageIcon, FileVideo } from "lucide-react"
 import Image from "next/image"
 
@@ -82,76 +81,77 @@ export function FileUpload({ onFileSelect, type, value, className }: FileUploadP
   }
 
   return (
-    <Card
-      className={`${className} ${
-        isDragging ? "border-cyan-500 bg-cyan-500/10" : "border-white/20 bg-white/5"
-      } transition-colors`}
-    >
-      <CardContent className="p-0">
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          accept={type === "image" ? "image/*" : "video/*"}
-          className="hidden"
-        />
+    <div className={className}>
+      <input
+        type="file"
+        ref={fileInputRef}
+        onChange={handleFileChange}
+        accept={type === "image" ? "image/*" : "video/*"}
+        className="hidden"
+      />
 
-        {!preview ? (
-          <div
-            className="flex flex-col items-center justify-center p-8 text-center cursor-pointer min-h-[200px]"
-            onClick={() => fileInputRef.current?.click()}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
+      {!preview ? (
+        <div
+          className={`flex flex-col items-center justify-center p-8 text-center cursor-pointer min-h-[200px] border-2 border-dashed rounded-lg transition-colors ${
+            isDragging ? "border-violet-500 bg-violet-50" : "border-gray-300 bg-white hover:bg-gray-50"
+          }`}
+          onClick={() => fileInputRef.current?.click()}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <div className="w-16 h-16 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+            <Upload className="h-8 w-8 text-violet-600" />
+          </div>
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            {type === "image" ? "Importer une image" : "Importer une vidéo"}
+          </h3>
+          <p className="text-sm text-gray-500 mb-4">Glissez-déposez ou cliquez pour sélectionner un fichier</p>
+          <Button
+            variant="outline"
+            className="bg-white hover:bg-gray-50 border-violet-300 text-violet-600"
+            onClick={(e) => {
+              e.stopPropagation()
+              fileInputRef.current?.click()
+            }}
           >
-            <div className="w-16 h-16 mb-4 rounded-full bg-white/10 flex items-center justify-center">
-              <Upload className="h-8 w-8 text-cyan-400" />
+            {type === "image" ? (
+              <>
+                <ImageIcon className="mr-2 h-4 w-4" />
+                Sélectionner une image
+              </>
+            ) : (
+              <>
+                <FileVideo className="mr-2 h-4 w-4" />
+                Sélectionner une vidéo
+              </>
+            )}
+          </Button>
+        </div>
+      ) : (
+        <div className="relative border border-gray-200 rounded-lg overflow-hidden bg-white">
+          {type === "image" ? (
+            <div className="relative h-[200px] w-full">
+              <Image src={preview || "/placeholder.svg"} alt="Aperçu" fill className="object-cover" />
             </div>
-            <h3 className="text-lg font-medium text-white mb-2">
-              {type === "image" ? "Importer une image" : "Importer une vidéo"}
-            </h3>
-            <p className="text-sm text-white/70 mb-4">Glissez-déposez ou cliquez pour sélectionner un fichier</p>
+          ) : (
+            <video src={preview} controls className="w-full h-[200px] object-cover" />
+          )}
+          <div className="p-4 flex justify-between items-center bg-gray-50 border-t">
+            <p className="text-sm text-gray-700 truncate max-w-[70%]">
+              {type === "image" ? "Image sélectionnée" : "Vidéo sélectionnée"}
+            </p>
             <Button
               variant="outline"
-              className="bg-white/10 hover:bg-white/20 border-white/20 text-white"
-              onClick={(e) => {
-                e.stopPropagation()
-                fileInputRef.current?.click()
-              }}
+              size="sm"
+              className="h-8 w-8 p-0 rounded-full border-red-300 text-red-600 hover:bg-red-50"
+              onClick={clearFile}
             >
-              {type === "image" ? (
-                <>
-                  <ImageIcon className="mr-2 h-4 w-4" />
-                  Sélectionner une image
-                </>
-              ) : (
-                <>
-                  <FileVideo className="mr-2 h-4 w-4" />
-                  Sélectionner une vidéo
-                </>
-              )}
+              <X className="h-4 w-4" />
             </Button>
           </div>
-        ) : (
-          <div className="relative">
-            {type === "image" ? (
-              <div className="relative h-[200px] w-full">
-                <Image src={preview || "/placeholder.svg"} alt="Aperçu" fill className="object-cover rounded-t-lg" />
-              </div>
-            ) : (
-              <video src={preview} controls className="w-full h-[200px] object-cover rounded-t-lg" />
-            )}
-            <div className="p-4 flex justify-between items-center bg-black/50 backdrop-blur-sm">
-              <p className="text-sm text-white truncate max-w-[70%]">
-                {type === "image" ? "Image sélectionnée" : "Vidéo sélectionnée"}
-              </p>
-              <Button variant="destructive" size="sm" className="h-8 w-8 p-0 rounded-full" onClick={clearFile}>
-                <X className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+        </div>
+      )}
+    </div>
   )
 }
