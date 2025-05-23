@@ -3,7 +3,9 @@ import { DashboardNav } from "@/components/dashboard-nav"
 import { UserNav } from "@/components/user-nav"
 import Link from "next/link"
 import { Search } from "lucide-react"
-import { Suspense } from "react"
+import { Suspense } from "react";
+import Image from "next/image"
+
 
 export default function DashboardLayout({
   children,
@@ -58,12 +60,19 @@ export default function DashboardLayout({
       <div className="flex flex-1">
         {/* Sidebar */}
         <aside className="hidden md:flex flex-col w-64 bg-violet-600 text-white">
-          <div className="p-4 flex items-center gap-2 border-b border-violet-500">
-            <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center">
-              <span className="text-violet-600 font-bold text-lg">U</span>
-            </div>
-            <span className="font-bold text-lg">UEMF</span>
-          </div>
+ <div className="p-6 border-b border-violet-500 flex justify-center">
+  <div className="relative w-24 h-24">
+    <Image
+      src="/logoUEMF.png"
+      alt="Logo UEMF"
+      layout="fill"
+      objectFit="contain"
+      priority
+    />
+  </div>
+</div>
+
+
           <div className="flex-1 py-4">
             <Suspense fallback={<div>Loading...</div>}>
               <DashboardNav />

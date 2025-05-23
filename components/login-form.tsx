@@ -47,21 +47,21 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="relative w-full max-w-md mx-auto">
-      {/* En-tête avec logo */}
-      <div className="text-center mb-8 animate-bounce-in">
-        <div className="flex justify-center mb-6">
+    <div className="relative w-full max-w-md mx-auto my-8 md:my-12 lg:my-16">
+   
+      <div className="text-center mb-8 md:mb-10 animate-bounce-in">
+        <div className="flex justify-center mb-6 md:mb-8">
           <div className="relative w-64 h-24 glass-card p-4">
             <Image src="/logoUEMF.png" alt="EUROMED UNIVERSITY OF FES" fill className="object-contain" priority />
           </div>
         </div>
-        <h1 className="text-2xl font-bold gradient-text mb-2">Plateforme Événements</h1>
-        <p className="text-white/90 text-lg font-medium">Université Euromed de Fès</p>
+        <h1 className="text-2xl md:text-3xl font-bold gradient-text mb-2">Plateforme Événements</h1>
+       
       </div>
 
-      {/* Formulaire de connexion */}
-      <div className="glass-card p-8 animate-slide-in-left">
-        <div className="flex items-center justify-center mb-6">
+   
+      <div className="glass-card p-6 md:p-8 animate-slide-in-left mb-8 md:mb-12">
+        <div className="flex items-center justify-center mb-6 md:mb-8">
           <Sparkles className="h-8 w-8 text-violet-600 mr-2" />
           <h2 className="text-2xl font-bold text-gray-800">Connexion</h2>
         </div>
@@ -132,21 +132,10 @@ export default function LoginForm() {
           </Button>
         </form>
 
-        {/* Informations de démonstration */}
-        <div className="mt-6 p-4 bg-gradient-to-r from-emerald-50 to-emerald-100 rounded-xl border border-emerald-200">
-          <p className="text-center text-sm text-emerald-800 font-medium mb-2">🔑 Identifiants de démonstration</p>
-          <div className="text-center text-sm text-emerald-700">
-            <p>
-              Nom d'utilisateur: <span className="font-bold text-emerald-900">admin</span>
-            </p>
-            <p>
-              Mot de passe: <span className="font-bold text-emerald-900">password</span>
-            </p>
-          </div>
-        </div>
+     
 
         {/* Footer */}
-        <div className="mt-6 text-center text-xs text-gray-600">© 2023 EUROMED UNIVERSITY OF FES</div>
+        <div className="mt-6 text-center text-xs text-gray-600">© 2025 EUROMED UNIVERSITY OF FES</div>
       </div>
     </div>
   )

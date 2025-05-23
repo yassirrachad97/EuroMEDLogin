@@ -2,7 +2,7 @@ import LoginForm from "@/components/login-form"
 
 export default function Home() {
   return (
-    <main className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <main className="min-h-screen flex items-center justify-center relative overflow-hidden py-4 md:py-8">
       {/* Fond animé avec gradients */}
       <div className="absolute inset-0 bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600">
         <div className="absolute inset-0 bg-gradient-to-tr from-emerald-400/20 via-transparent to-orange-400/20"></div>

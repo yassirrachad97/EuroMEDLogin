@@ -51,7 +51,7 @@ export default function EventsPage() {
           <p className="text-muted-foreground">Gérez vos événements universitaires</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleReset} className="gap-1">
+          <Button  variant="outline" size="sm" onClick={handleReset} className="gap-1 bg-violet-600 hover:bg-violet-700">
             <RefreshCw className="h-4 w-4" />
             Réinitialiser
           </Button>
@@ -64,20 +64,25 @@ export default function EventsPage() {
         </div>
       </div>
 
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle>Options d'affichage</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center space-x-2">
-            <Switch id="drag-drop-mode" checked={enableDragDrop} onCheckedChange={setEnableDragDrop} />
-            <Label htmlFor="drag-drop-mode" className="flex items-center">
-              <ArrowDownUp className="mr-2 h-4 w-4 text-violet-600" />
-              Mode réorganisation
-            </Label>
-          </div>
-        </CardContent>
-      </Card>
+      <Card className="bg-white text-black">
+  <CardHeader className="pb-3">
+    <CardTitle>Options d'affichage</CardTitle>
+  </CardHeader>
+  <CardContent>
+    <div className="flex items-center space-x-2">
+      <Switch
+        id="drag-drop-mode"
+        checked={enableDragDrop}
+        onCheckedChange={setEnableDragDrop}
+      />
+      <Label htmlFor="drag-drop-mode" className="flex items-center">
+        <ArrowDownUp className="mr-2 h-4 w-4 text-violet-600" />
+        Mode réorganisation
+      </Label>
+    </div>
+  </CardContent>
+</Card>
+
 
       <div className="grid gap-4">
         {isLoading ? (
